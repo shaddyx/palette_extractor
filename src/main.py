@@ -14,7 +14,7 @@ parser.add_argument("--colors", type=int, default=32)
 args = parser.parse_args()
 
 output_file = "{}_palette.png".format(args.filename.split(".")[0])
-output_txt = "{}_colors.txt".format(args.filename.split(".")[0])
+output_txt = "{}_colors.palette".format(args.filename.split(".")[0])
 
 
 def get_colors(data):
@@ -67,7 +67,7 @@ def create_color_palette_image(colors: List[Tuple[int, int, int]], square_width:
         A PIL Image object representing the color palette.
     """
 
-    image_width = square_width
+    image_width = square_width * 2
     image_height = square_heigth * len(colors)
 
     image = Image.new("RGB", (image_width, image_height))
@@ -85,7 +85,7 @@ def create_color_palette_image(colors: List[Tuple[int, int, int]], square_width:
     font = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 32)
     for i, color_chunk in enumerate(colors):
         hex_color = "#%02x%02x%02x" % color_chunk
-        draw.text((0, i * square_heigth), hex_color, (0, 0, 0), font)
+        draw.text((square_width, i * square_heigth), hex_color, (255, 255, 255), font)
     return image
 
 
@@ -97,9 +97,12 @@ palette_image = create_color_palette_image(reduced)
 palette_image.show()  # to show image
 palette_image.save(output_file)  # to save image
 
-# # save colors into file in hex
-# with open(output_txt, "w") as f:
-#     for color in reduced:
-#         # format tuple to hex
-#         color = "#%02x%02x%02x" % color
-#         f.write(f"{color}\n")
+# save colors into file in hex
+with open(output_txt, "w") as f:
+    res = []
+    for color in reduced:
+        # format tuple to hex
+        color = "#%02x%02x%02x" % color
+        res.append(color)
+    color = ",".join(res)
+    f.write(f"{color}\n")
