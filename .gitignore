@@ -1,0 +1,7 @@
+.idea
+.code
+__pycache__
+.pytest_cache
+venv
+*.jpg
+*.png
